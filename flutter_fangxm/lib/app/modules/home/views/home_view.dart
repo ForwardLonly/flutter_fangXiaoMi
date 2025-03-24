@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
@@ -14,6 +16,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
 
+    print(Screenadapter.screenWidth());
+    print(Screenadapter.screenHeight());
 
     return KeepAliveWraper(
       child: Scaffold(
@@ -21,10 +25,14 @@ class HomeView extends GetView<HomeController> {
           title: const Text('HomeView'),
           centerTitle: true,
         ),
-        body: ListView(
-          children: indexList.map((value){
-            return ListTile(title: Text("$value"));
-          }).toList(),
+        body: Column(
+          children: [
+            Container(
+              width: Screenadapter.width(1080),
+              height: Screenadapter.height(600),
+              color: Colors.red,
+            )
+          ],
         ),
       )
     );

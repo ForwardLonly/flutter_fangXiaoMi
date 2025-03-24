@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../controllers/tabs_controller.dart';
 
 class TabsView extends GetView<TabsController> {
@@ -11,6 +9,7 @@ class TabsView extends GetView<TabsController> {
     return Obx((){
       return Scaffold(
         body: PageView(
+          // 让页面可以左右滑动
           controller: controller.pageController,
           children: controller.pages,
           onPageChanged: (index){
