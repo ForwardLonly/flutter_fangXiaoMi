@@ -89,3 +89,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    # 指定一个 名字
+    - family: fangXMIcon
+      fonts:
+      - asset: assets/fonts/iconfont.ttf
