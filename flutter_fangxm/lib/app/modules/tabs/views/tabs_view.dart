@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
 import 'package:get/get.dart';
 import '../controllers/tabs_controller.dart';
 
@@ -30,7 +31,7 @@ class TabsView extends GetView<TabsController> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
             BottomNavigationBarItem(icon: Icon(Icons.category), label: "分类"),
-            BottomNavigationBarItem(icon: Icon(Icons.room_service), label: "服务"),
+            BottomNavigationBarItem(icon: Icon(FangXMIcon.fuwu), label: "服务"),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "购物车"),
             BottomNavigationBarItem(icon: Icon(Icons.people), label: "用户"),
           ]

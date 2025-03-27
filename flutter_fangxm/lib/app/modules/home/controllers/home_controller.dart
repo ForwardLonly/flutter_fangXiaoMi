@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,12 +7,26 @@ class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
   // 滚动是否大于20
   RxBool xOffIsBig20 = false.obs;
+  // 广告轮播图的数据
+  RxList adList = [].obs;
 
   @override
   void onInit() {
     super.onInit();
 
     // 对滚动添加监听
+    _scrollControllerListener();
+    // 获取广告轮播图的数据
+    _getADScrollImagesRequest();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  // 添加滚动视图的监听
+  void _scrollControllerListener() {
     scrollController.addListener((){
       if (scrollController.position.pixels > 20) {
         if (xOffIsBig20.value == false) {
@@ -29,9 +44,13 @@ class HomeController extends GetxController {
     });
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  // 获取广告轮播图的数据
+  void _getADScrollImagesRequest() async {
+    final response = await Dio().get("https://miapp.itying.com/api/focus");
+    if (response.statusCode == 200) {
+      adList.value = response.data["result"];
+      update();
+    }
   }
 
 }

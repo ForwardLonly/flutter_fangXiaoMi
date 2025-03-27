@@ -35,7 +35,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   get: ^4.7.2
+  # 屏幕适配
   flutter_screenutil: ^5.9.3
+  # 轮播图
+  flutter_swiper_view: ^1.1.8
+  # 网络请求
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +63,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    # 指定一个 名字
+    - family: fangXMIcon
+      fonts:
+      - asset: assets/fonts/iconfont.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -89,8 +99,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-  fonts:
-    # 指定一个 名字
-    - family: fangXMIcon
-      fonts:
-      - asset: assets/fonts/iconfont.ttf
+  

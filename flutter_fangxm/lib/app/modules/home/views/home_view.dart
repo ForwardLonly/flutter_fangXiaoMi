@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
 import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 
 import 'package:get/get.dart';
 
@@ -73,14 +74,38 @@ class HomeView extends GetView<HomeController> {
 
   // 添加图片轮播图
   Widget _topImageWidget() {
-    return SizedBox(
-      width: double.infinity,
-      height: Screenadapter.height(685),
-      child: Image.network(
-        "https://www.itying.com/images/focus/focus02.png",
-        fit: BoxFit.cover,
-      ),
-    );
+    return Obx((){
+      if (controller.adList.length == 0) {
+        return SizedBox(
+          width: double.infinity,
+          height: Screenadapter.height(685),
+          child: Center(child: Text("加载中..."))
+        );
+      } else {
+        return SizedBox(
+        width: double.infinity,
+        height: Screenadapter.height(685),
+        child:  Swiper(
+          itemBuilder: (context, index){
+            var imageUrl = controller.adList[index]["pic"] as String;
+            imageUrl = imageUrl.replaceAll("\\", "/");
+            imageUrl = "https://miapp.itying.com/$imageUrl";
+            return Image.network(imageUrl,fit: BoxFit.fill,);
+          },
+          itemCount: controller.adList.length,
+          pagination: const SwiperPagination(
+            // 修改分页指示器的配置
+            builder: RectSwiperPaginationBuilder(
+              activeColor: Colors.red,
+              color: Colors.white
+            )
+          ),
+          autoplay: true,
+          loop: true,
+        ),
+      );
+      }
+    });
   }
 
   @override
@@ -111,7 +136,7 @@ class HomeView extends GetView<HomeController> {
               )
             ),
             Positioned(
-              top: 0, // Screenadapter.height(158),
+              top: 0, 
               left: 0,
               right: 0,
               child: Obx((){
