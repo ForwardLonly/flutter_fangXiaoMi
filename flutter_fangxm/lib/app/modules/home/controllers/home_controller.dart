@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -48,7 +49,8 @@ class HomeController extends GetxController {
   void _getADScrollImagesRequest() async {
     final response = await Dio().get("https://miapp.itying.com/api/focus");
     if (response.statusCode == 200) {
-      adList.value = response.data["result"];
+      final focusModel = FocusModel.fromJson( response.data);
+      adList.value = focusModel.result;
       update();
     }
   }

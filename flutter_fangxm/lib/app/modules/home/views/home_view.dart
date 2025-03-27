@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
 import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
@@ -75,7 +76,7 @@ class HomeView extends GetView<HomeController> {
   // 添加图片轮播图
   Widget _topImageWidget() {
     return Obx((){
-      if (controller.adList.length == 0) {
+      if (controller.adList.isEmpty) {
         return SizedBox(
           width: double.infinity,
           height: Screenadapter.height(685),
@@ -87,7 +88,8 @@ class HomeView extends GetView<HomeController> {
         height: Screenadapter.height(685),
         child:  Swiper(
           itemBuilder: (context, index){
-            var imageUrl = controller.adList[index]["pic"] as String;
+            var focusItemModel =  controller.adList[index] as FocusItemModel;
+            var imageUrl = focusItemModel.pic  as String;
             imageUrl = imageUrl.replaceAll("\\", "/");
             imageUrl = "https://miapp.itying.com/$imageUrl";
             return Image.network(imageUrl,fit: BoxFit.fill,);
