@@ -13,6 +13,12 @@ class HomeController extends GetxController {
   RxList adList = [].obs;
   // 分类的数据
   RxList categoryList = [].obs;
+  // 广告的推荐图片
+  final List<String> adRecommendPicList = [
+    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/e981f78d2ac17c504975a719cb8b069d.png?w=632&h=340",
+    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6b04dfc206dec442fe161b33082681ec.png?w=632&h=340",
+    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6b0c7fadbd84a808287af5faad6e62d7.png?w=632&h=340"
+  ];
 
   @override
   void onInit() {

@@ -12,9 +12,7 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
 
-  final List<int> indexList = [1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,17,18,19,20];
-
-  HomeView({super.key});
+ const HomeView({super.key});
 
   // 添加导航栏
   Widget _topNavigationWidget() {
@@ -176,6 +174,58 @@ class HomeView extends GetView<HomeController> {
     ));
   }
 
+  // 添加广告视图
+  Widget _adWidget() {
+    var margin = Screenadapter.width(30);
+    var margin20 = Screenadapter.width(20);
+    return Container(
+      padding: EdgeInsets.fromLTRB(margin, 0, margin, 0),
+      height: Screenadapter.height(730),
+      child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: NetworkImage(
+                    // "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/2e389157059c44d9352b42e04407cbb7.jpg?w=2452&h=920"
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b75dfaeaed384e1c7110b4fc855d65bf.jpg?thumb=1&w=2452&h=920&f=webp&q=90"
+                  )
+                )
+              ),
+              height: Screenadapter.height(730)
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(margin20, 0, margin20, margin20),
+                height: Screenadapter.height(266),
+                child: Row(
+                  spacing: margin20,
+                  children: controller.adRecommendPicList.map((imageUrl) {
+                    return  Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(imageUrl)
+                          )
+                        ),
+                        height: Screenadapter.height(246)
+                      )
+                    );
+                  }).toList()
+                ),
+              ),
+            )
+          ],
+        ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -193,7 +243,8 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   _topImageWidget(),
                   _bannerWidget(),
-                  _categoryWidget()
+                  _categoryWidget(),
+                  _adWidget()
                 ],
               )
             ),
