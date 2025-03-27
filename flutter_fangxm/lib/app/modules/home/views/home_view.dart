@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
@@ -98,8 +99,8 @@ class HomeView extends GetView<HomeController> {
           pagination: const SwiperPagination(
             // 修改分页指示器的配置
             builder: RectSwiperPaginationBuilder(
-              activeColor: Colors.red,
-              color: Colors.white
+              activeColor: Colors.white,
+              color: Colors.black12
             )
           ),
           autoplay: true,
@@ -108,6 +109,71 @@ class HomeView extends GetView<HomeController> {
       );
       }
     });
+  }
+
+  // 添加标签图
+  Widget _bannerWidget() {
+    return Container(
+      color: Colors.white,
+      width: Screenadapter.width(1480),
+      height: Screenadapter.height(100),
+      child: Image.asset("assets/images/xiaomiBanner.png"),
+    );
+  }
+
+  // 添加分类视图
+  Widget _categoryWidget() {
+    return Obx(() => Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: Screenadapter.height(460),
+      child: Swiper(
+          itemBuilder: (context, index){
+            return GridView.builder(
+              padding: EdgeInsets.fromLTRB(Screenadapter.width(30), 0, Screenadapter.width(30), 0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                crossAxisSpacing: Screenadapter.height(10),
+                mainAxisSpacing:  Screenadapter.height(20),
+              ),
+              itemCount: 10,
+              itemBuilder: (context, i) {
+                var itemModel = controller.categoryList[index * 10 + i] as CategoryItemModel;
+                var imageUrl = itemModel.pic!.replaceAll("\\", "/");
+                imageUrl = "https://miapp.itying.com/$imageUrl";
+                return InkWell(
+                  onTap: (){},
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: Screenadapter.height(140),
+                        height: Screenadapter.height(140),
+                        child: Image.network(imageUrl, fit: BoxFit.fitHeight),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, Screenadapter.height(10), 0, 0),
+                        child: Text("${itemModel.title}", style: TextStyle(fontSize:Screenadapter.fontSize(34)),),
+                      )
+                    ],
+                  )
+                );
+              });
+          },
+          itemCount: (controller.categoryList.length  / 10).toInt(),
+          pagination: SwiperPagination(
+            // 修改轮播图指示器距离底部的位置
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+             // 修改分页指示器的配置
+            builder: RectSwiperPaginationBuilder(
+              activeColor: Colors.black38,
+              color: Colors.black12,
+              size: Size(Screenadapter.width(66), Screenadapter.height(6)),
+              activeSize: Size(Screenadapter.width(66), Screenadapter.height(6)),
+            )
+          ),
+        )
+    ));
   }
 
   @override
@@ -122,19 +188,13 @@ class HomeView extends GetView<HomeController> {
               left: 0,
               right: 0,
               bottom: 0,
-              child: ListView.builder(
+              child: ListView(
                 controller: controller.scrollController,
-                itemCount: 200,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return _topImageWidget();
-                  } else {
-                    return ListTile(
-                      leading: Icon(Icons.people),
-                      title: Text("放小米的cell"),
-                    );
-                  }
-                }
+                children: [
+                  _topImageWidget(),
+                  _bannerWidget(),
+                  _categoryWidget()
+                ],
               )
             ),
             Positioned(

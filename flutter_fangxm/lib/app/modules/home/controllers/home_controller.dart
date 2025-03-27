@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,8 @@ class HomeController extends GetxController {
   RxBool xOffIsBig20 = false.obs;
   // 广告轮播图的数据
   RxList adList = [].obs;
+  // 分类的数据
+  RxList categoryList = [].obs;
 
   @override
   void onInit() {
@@ -19,6 +22,8 @@ class HomeController extends GetxController {
     _scrollControllerListener();
     // 获取广告轮播图的数据
     _getADScrollImagesRequest();
+    // 获取分类的数据
+    _getCategoryRequest();
   }
 
   @override
@@ -51,6 +56,16 @@ class HomeController extends GetxController {
     if (response.statusCode == 200) {
       final focusModel = FocusModel.fromJson( response.data);
       adList.value = focusModel.result;
+      update();
+    }
+  }
+
+  // 获取分类的数据
+  void _getCategoryRequest() async {
+    final response = await Dio().get("https://miapp.itying.com/api/bestCate");
+    if (response.statusCode == 200) {
+      final categoryModel = CategoryModel.fromJson(response.data);
+      categoryList.value = categoryModel.result;
       update();
     }
   }
