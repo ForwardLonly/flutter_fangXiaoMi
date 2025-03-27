@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
+import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -19,6 +20,10 @@ class HomeController extends GetxController {
     "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6b04dfc206dec442fe161b33082681ec.png?w=632&h=340",
     "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6b0c7fadbd84a808287af5faad6e62d7.png?w=632&h=340"
   ];
+  // 热销甄选的轮播图
+  RxList hotSellSwiperList = [].obs;
+  // 热销甄选的数据
+  RxList hotSellRecommendList = [].obs;
 
   @override
   void onInit() {
@@ -30,6 +35,10 @@ class HomeController extends GetxController {
     _getADScrollImagesRequest();
     // 获取分类的数据
     _getCategoryRequest();
+    // 获取热销甄选轮播图的数据
+    _getHotSellSwiperRequest();
+    // 获取热销甄选的推荐数据
+    _getHotSelRecommendRequest();
   }
 
   @override
@@ -76,4 +85,23 @@ class HomeController extends GetxController {
     }
   }
 
+  // 获取热销甄选轮播图的数据
+  void _getHotSellSwiperRequest() async {
+    final response = await Dio().get("https://miapp.itying.com/api/focus?position=2");
+    if (response.statusCode == 200) {
+      final sellModel = FocusModel.fromJson( response.data);
+      hotSellSwiperList.value = sellModel.result;
+      update();
+    }
+  }
+
+   // 获取热销甄选的推荐数据
+  void _getHotSelRecommendRequest() async {
+    final response = await Dio().get("https://miapp.itying.com/api/plist?is_hot=1");
+    if (response.statusCode == 200) {
+      final productModel = ProductMdel.fromJson( response.data);
+      hotSellRecommendList.value = productModel.result;
+      update();
+    }
+  } 
 }
