@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Screenadapter {
@@ -6,8 +7,8 @@ class Screenadapter {
   }
 
   static height(num height) {
-    return height.h;
-    // return height.w;
+    // return height.h;
+    return height.w;
   }
 
   static fontSize(num size) {
@@ -20,5 +21,13 @@ class Screenadapter {
 
   static screenHeight() {
     return ScreenUtil().screenHeight;
+  }
+
+  static stateBarHeight() {
+    return ScreenUtil().statusBarHeight;
+  }
+
+  static navigationBarHeight() {
+    return AppBar().preferredSize.height;
   }
 }

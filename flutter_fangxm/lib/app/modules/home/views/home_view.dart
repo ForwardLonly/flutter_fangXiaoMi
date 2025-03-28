@@ -21,11 +21,16 @@ class HomeView extends GetView<HomeController> {
   // 添加导航栏
   Widget _topNavigationWidget() {
     final xMargin = Screenadapter.width(42);
+    double topMargin = controller.getTopMargin();
+    double height = Screenadapter.height(188 + topMargin);
+    if (Screenadapter.stateBarHeight() > 20) {
+      height = Screenadapter.height(188 + topMargin + 40);
+    }
     return Container(
       color: controller.xOffIsBig20.value ? Colors.white : Colors.transparent,
-      padding: EdgeInsets.fromLTRB(0, Screenadapter.height(158), 0, 0),
+      padding: EdgeInsets.fromLTRB(0, topMargin, 0, 0),
       width: Screenadapter.width(1080),
-      height: Screenadapter.height(288),
+      height: height,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -126,7 +131,7 @@ class HomeView extends GetView<HomeController> {
     return Obx(() => Container(
       color: Colors.white,
       width: double.infinity,
-      height: Screenadapter.height(460),
+      height: Screenadapter.height(480),
       child: Swiper(
           itemBuilder: (context, index){
             return GridView.builder(
@@ -135,8 +140,11 @@ class HomeView extends GetView<HomeController> {
                 crossAxisCount: 5,
                 crossAxisSpacing: Screenadapter.height(10),
                 mainAxisSpacing:  Screenadapter.height(20),
+                childAspectRatio: 1/1.1
               ),
               itemCount: 10,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
                 var itemModel = controller.categoryList[index * 10 + i] as CategoryItemModel;
                 var imageUrl = itemModel.pic!.replaceAll("\\", "/");
@@ -269,7 +277,10 @@ class HomeView extends GetView<HomeController> {
                     itemBuilder: (context, index){
                       var focusItemModel =  controller.hotSellSwiperList[index] as FocusItemModel;
                       var imageUrl = "https://miapp.itying.com/${focusItemModel.pic}";
-                      return Image.network(imageUrl.replaceAll("\\", "/"),fit: BoxFit.cover,);
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.network(imageUrl.replaceAll("\\", "/"), fit: BoxFit.cover),
+                      );
                     },
                     itemCount: controller.hotSellSwiperList.length,
                     pagination: const SwiperPagination(
@@ -459,7 +470,7 @@ class HomeView extends GetView<HomeController> {
         body: Stack(
           children: [
             Positioned(
-              top: Screenadapter.height(-164),
+              top: -controller.getTopMargin(),
               left: 0,
               right: 0,
               bottom: 0,

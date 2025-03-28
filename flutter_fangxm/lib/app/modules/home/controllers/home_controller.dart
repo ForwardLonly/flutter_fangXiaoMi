@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
+import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -118,4 +119,15 @@ class HomeController extends GetxController {
       update();
     }
   } 
+
+  // 获取顶部高度
+  double getTopMargin() {
+    double topMargin;
+    if (Screenadapter.stateBarHeight() > 20) {
+      topMargin = Screenadapter.height(100 + Screenadapter.stateBarHeight());
+    } else {
+      topMargin = Screenadapter.height(44 + Screenadapter.stateBarHeight());
+    }
+    return topMargin;
+  }
 }
