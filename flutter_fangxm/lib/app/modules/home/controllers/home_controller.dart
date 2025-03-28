@@ -24,6 +24,8 @@ class HomeController extends GetxController {
   RxList hotSellSwiperList = [].obs;
   // 热销甄选的数据
   RxList hotSellRecommendList = [].obs;
+  // 商品列表的数据
+  RxList goodsList = [].obs;
 
   @override
   void onInit() {
@@ -39,6 +41,8 @@ class HomeController extends GetxController {
     _getHotSellSwiperRequest();
     // 获取热销甄选的推荐数据
     _getHotSelRecommendRequest();
+    // 获取商品的数据
+    _getGoodsListRequest();
   }
 
   @override
@@ -101,6 +105,16 @@ class HomeController extends GetxController {
     if (response.statusCode == 200) {
       final productModel = ProductMdel.fromJson( response.data);
       hotSellRecommendList.value = productModel.result;
+      update();
+    }
+  } 
+
+  // 获取商品的数据
+  void _getGoodsListRequest() async {
+    final response = await Dio().get("https://miapp.itying.com/api/plist");
+    if (response.statusCode == 200) {
+      final productModel = ProductMdel.fromJson( response.data);
+      goodsList.value = productModel.result;
       update();
     }
   } 

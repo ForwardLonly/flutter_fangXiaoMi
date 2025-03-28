@@ -7,6 +7,7 @@ class Screenadapter {
 
   static height(num height) {
     return height.h;
+    // return height.w;
   }
 
   static fontSize(num size) {

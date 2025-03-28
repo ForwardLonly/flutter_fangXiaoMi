@@ -7,6 +7,7 @@ import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
 import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 
 import 'package:get/get.dart';
@@ -227,6 +228,21 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
+  // 添加标题
+  Widget _titleWidget(String title, String subTitle) {
+    return SizedBox(
+      height: Screenadapter.height(100),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(48))),
+          Text(subTitle, style: TextStyle(color: Colors.black54, fontSize: Screenadapter.fontSize(38))),
+        ],
+      )
+    );
+  }
+
   // 添加热销甄选
   Widget _hotSellWidget() {
     var topMargin = Screenadapter.height(20);
@@ -237,17 +253,7 @@ class HomeView extends GetView<HomeController> {
       height: Screenadapter.height(890),
       child: Column(
         children: [
-          SizedBox(
-            height: Screenadapter.height(100),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("热销甄选", style: TextStyle(fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(48))),
-                Text("更多手机推荐 >", style: TextStyle(color: Colors.black54, fontSize: Screenadapter.fontSize(38))),
-              ],
-            )
-          ),
+          _titleWidget("热销甄选", "更多手机推荐 >"),
           Row(
             spacing: xMargin,
             children: [
@@ -355,6 +361,96 @@ class HomeView extends GetView<HomeController> {
   }
 
 
+  // 添加商品列表
+  Widget _goodsListWidget() {
+    return Obx(() => Container(
+      padding: EdgeInsets.fromLTRB(
+        Screenadapter.width(30), 
+        Screenadapter.height(20),
+        Screenadapter.width(30),
+        Screenadapter.height(20)
+      ),
+      child: Column(
+        children: [
+          _titleWidget("精选推荐", ""),
+          MasonryGridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: Screenadapter.width(20),
+            crossAxisSpacing: Screenadapter.width(20),
+            itemCount: controller.goodsList.length,
+            // 自适应宽度
+            shrinkWrap: true,
+            // 禁止内部滚动
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              var itemModel = controller.goodsList[index] as ProductItemMdel;
+              var imageUrl = "https://miapp.itying.com/${itemModel.pic}";
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5)
+                        ),
+                      child: Image.network(
+                        imageUrl.replaceAll("\\", "/"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        top: Screenadapter.height(30),
+                        left: Screenadapter.width(20),
+                      ),
+                      child: Text(
+                        "${itemModel.title}", 
+                        textAlign: TextAlign.start, 
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(38))
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        top: Screenadapter.height(20),
+                        left: Screenadapter.width(20),
+                      ),
+                      child: Text(
+                        "${itemModel.title}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(color: Colors.black38, fontSize: Screenadapter.fontSize(32))
+                      ),
+                    ),
+
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        top: Screenadapter.height(40),
+                        left: Screenadapter.width(20),
+                        bottom: Screenadapter.height(50),
+                      ),
+                      child: Text(
+                        "￥${itemModel.price}元起",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(36))
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          )
+        ],
+      ),
+      
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -374,7 +470,8 @@ class HomeView extends GetView<HomeController> {
                   _bannerWidget(),
                   _categoryWidget(),
                   _adWidget(),
-                  _hotSellWidget()
+                  _hotSellWidget(),
+                  _goodsListWidget()
                 ],
               )
             ),
