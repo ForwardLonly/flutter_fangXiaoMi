@@ -84,7 +84,7 @@ class HomeController extends GetxController {
 
   // 获取分类的数据
   void _getCategoryRequest() async {
-    final response = await HttpsClient.get("api/bestCate1");
+    final response = await HttpsClient.get("api/bestCate");
     if (response.statusCode == 200) {
       final categoryModel = CategoryModel.fromJson(response.data);
       categoryList.value = categoryModel.result;
