@@ -1,9 +1,11 @@
-import 'package:dio/dio.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
+import 'package:flutter_fangxm/app/service/https_client.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -72,7 +74,7 @@ class HomeController extends GetxController {
 
   // 获取广告轮播图的数据
   void _getADScrollImagesRequest() async {
-    final response = await Dio().get("https://miapp.itying.com/api/focus");
+    final response = await HttpsClient.get("api/focus");
     if (response.statusCode == 200) {
       final focusModel = FocusModel.fromJson( response.data);
       adList.value = focusModel.result;
@@ -82,7 +84,7 @@ class HomeController extends GetxController {
 
   // 获取分类的数据
   void _getCategoryRequest() async {
-    final response = await Dio().get("https://miapp.itying.com/api/bestCate");
+    final response = await HttpsClient.get("api/bestCate1");
     if (response.statusCode == 200) {
       final categoryModel = CategoryModel.fromJson(response.data);
       categoryList.value = categoryModel.result;
@@ -92,7 +94,7 @@ class HomeController extends GetxController {
 
   // 获取热销甄选轮播图的数据
   void _getHotSellSwiperRequest() async {
-    final response = await Dio().get("https://miapp.itying.com/api/focus?position=2");
+    final response = await HttpsClient.get("api/focus?position=2");
     if (response.statusCode == 200) {
       final sellModel = FocusModel.fromJson( response.data);
       hotSellSwiperList.value = sellModel.result;
@@ -102,7 +104,7 @@ class HomeController extends GetxController {
 
    // 获取热销甄选的推荐数据
   void _getHotSelRecommendRequest() async {
-    final response = await Dio().get("https://miapp.itying.com/api/plist?is_hot=1");
+    final response = await HttpsClient.get("api/plist?is_hot=1");
     if (response.statusCode == 200) {
       final productModel = ProductMdel.fromJson( response.data);
       hotSellRecommendList.value = productModel.result;
@@ -112,7 +114,7 @@ class HomeController extends GetxController {
 
   // 获取商品的数据
   void _getGoodsListRequest() async {
-    final response = await Dio().get("https://miapp.itying.com/api/plist");
+    final response = await HttpsClient.get("api/plist");
     if (response.statusCode == 200) {
       final productModel = ProductMdel.fromJson( response.data);
       goodsList.value = productModel.result;

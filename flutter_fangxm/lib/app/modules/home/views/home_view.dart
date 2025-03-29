@@ -5,6 +5,7 @@ import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
+import 'package:flutter_fangxm/app/service/https_client.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
 import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -97,8 +98,7 @@ class HomeView extends GetView<HomeController> {
         child:  Swiper(
           itemBuilder: (context, index){
             var focusItemModel =  controller.adList[index] as FocusItemModel;
-            var imageUrl = "https://miapp.itying.com/${focusItemModel.pic}";
-            return Image.network(imageUrl.replaceAll("\\", "/"),fit: BoxFit.fill,);
+            return Image.network(HttpsClient.replacePic("${focusItemModel.pic}"),fit: BoxFit.fill,);
           },
           itemCount: controller.adList.length,
           pagination: const SwiperPagination(
@@ -147,8 +147,6 @@ class HomeView extends GetView<HomeController> {
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
                 var itemModel = controller.categoryList[index * 10 + i] as CategoryItemModel;
-                var imageUrl = itemModel.pic!.replaceAll("\\", "/");
-                imageUrl = "https://miapp.itying.com/$imageUrl";
                 return InkWell(
                   onTap: (){},
                   child: Column(
@@ -157,7 +155,7 @@ class HomeView extends GetView<HomeController> {
                       SizedBox(
                         width: Screenadapter.height(140),
                         height: Screenadapter.height(140),
-                        child: Image.network(imageUrl, fit: BoxFit.fitHeight),
+                        child: Image.network(HttpsClient.replacePic("${itemModel.pic}"), fit: BoxFit.fitHeight),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, Screenadapter.height(10), 0, 0),
@@ -276,10 +274,9 @@ class HomeView extends GetView<HomeController> {
                   child: Obx(()=> Swiper(
                     itemBuilder: (context, index){
                       var focusItemModel =  controller.hotSellSwiperList[index] as FocusItemModel;
-                      var imageUrl = "https://miapp.itying.com/${focusItemModel.pic}";
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: Image.network(imageUrl.replaceAll("\\", "/"), fit: BoxFit.cover),
+                        child: Image.network(HttpsClient.replacePic("${focusItemModel.pic}"), fit: BoxFit.cover),
                       );
                     },
                     itemCount: controller.hotSellSwiperList.length,
@@ -301,7 +298,6 @@ class HomeView extends GetView<HomeController> {
                   spacing: yMargin,
                   children: controller.hotSellRecommendList.map((value){
                     var itemModel = value as ProductItemMdel;
-                    var imageUrl = "https://miapp.itying.com/${itemModel.pic}";
 
                     return Container(
                       height: Screenadapter.height(236),
@@ -354,7 +350,7 @@ class HomeView extends GetView<HomeController> {
                           Expanded(
                             flex: 2,
                             child: Image.network(
-                              imageUrl.replaceAll("\\", "/"),
+                              HttpsClient.replacePic("${itemModel.pic}"),
                               fit: BoxFit.cover,
                             )
                           )
@@ -395,7 +391,6 @@ class HomeView extends GetView<HomeController> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               var itemModel = controller.goodsList[index] as ProductItemMdel;
-              var imageUrl = "https://miapp.itying.com/${itemModel.pic}";
               return Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -409,7 +404,7 @@ class HomeView extends GetView<HomeController> {
                           topRight: Radius.circular(5)
                         ),
                       child: Image.network(
-                        imageUrl.replaceAll("\\", "/"),
+                        HttpsClient.replacePic("${itemModel.pic}"),
                         fit: BoxFit.cover,
                       ),
                     ),
