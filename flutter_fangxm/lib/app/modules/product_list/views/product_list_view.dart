@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
+import 'package:flutter_fangxm/app/service/https_client.dart';
 
 import 'package:get/get.dart';
 
@@ -30,210 +31,64 @@ class ProductListView extends GetView<ProductListController> {
 
   // 商品列表
   Widget _productListWidget() {
-    return ListView.builder(
-      padding: EdgeInsets.fromLTRB(
-        Screenadapter.width(24),
-        Screenadapter.width(124), 
-        Screenadapter.width(24), 
-        Screenadapter.width(24)),
-      itemCount: 30,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.only(bottom: Screenadapter.width(24)),
-          height: Screenadapter.width(532),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20)
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 图片
-              Container(
-                width: Screenadapter.width(360),
-                padding: EdgeInsets.fromLTRB(Screenadapter.width(20), Screenadapter.height(20), Screenadapter.width(20), 0),
-                child: Image.network(
-                  "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1735279484.83039321.png",
-                  fit: BoxFit.fitWidth,
+    return Obx( () {
+      if (controller.productList.isNotEmpty) {
+        return ListView.builder(
+          controller: controller.scrollController,
+          padding: EdgeInsets.fromLTRB(
+            Screenadapter.width(24),
+            Screenadapter.width(124), 
+            Screenadapter.width(24), 
+            Screenadapter.width(24)),
+          itemCount: controller.productList.length,
+          itemBuilder: (context, index) {
+            var itemModel = controller.productList[index];
+            return Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(bottom: Screenadapter.width(24)),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 图片
+                      _listImageWidget(HttpsClient.replacePic("${itemModel.pic}")),
+                      // 手机信息
+                      Expanded(child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 商品名称,
+                          _listProductNameWidget("${itemModel.title}"),
+                          // 商品描述
+                          _listProductDescritionWidget("${itemModel.subTitle}"),
+                          // 商品性能
+                          _listProductInterInfoWiget(),
+                          // 商品价格,
+                          _listProductPrice("${itemModel.price}"),
+                          // 商品标签
+                          _listProdctTag(),
+                          // 商品评论
+                          _listProductCommendWidget()
+                        ],
+                      ))
+                    ],
+                  ),
                 ),
-              ),
-              // 手机信息
-              Expanded(child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(40),
-                      right: Screenadapter.width(50),
-                    ),
-                    child: Text(
-                      "Redmi 10A",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: Screenadapter.fontSize(42)
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(10),
-                      right: Screenadapter.width(50),
-                    ),
-                    child: Text(
-                      "6.53 大尺寸屏幕11300万超清主摄1 Helio G25八核处理器15000mAh充电宝级大...",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: Screenadapter.fontSize(32),
-                        color: Colors.black38
-                      ),
-                      maxLines: 2,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(10),
-                      right: Screenadapter.width(0),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(child: Column(
-                          children: [
-                            Text(
-                              "CPU",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(32),
-                                color: Colors.black45
-                              ),
-                            ),
-                            Text(
-                              "Helio G25",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(28),
-                                color: Colors.black45
-                              ),
-                            ),
-                          ],
-                        )),
-                        Container(
-                          width: 1,
-                          height: Screenadapter.height(40),
-                          color: Colors.black12,
-                        ),
-                        Expanded(child: Column(
-                          children: [
-                            Text(
-                              "高清拍摄",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(32),
-                                color: Colors.black45
-                              ),
-                            ),
-                            Text(
-                              "1300万 像素",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(28),
-                                color: Colors.black45
-                              ),
-                            ),
-                          ],
-                        )),
-                        Container(
-                          width: 1,
-                          height: Screenadapter.height(40),
-                          color: Colors.black12,
-                        ),
-                        Expanded(child: Column(
-                          children: [
-                            Text(
-                              "超大屏",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(32),
-                                color: Colors.black45
-                              ),
-                            ),
-                            Text(
-                              "6.3英寸",
-                              style: TextStyle(
-                                fontSize: Screenadapter.fontSize(28),
-                                color: Colors.black45
-                              ),
-                            ),
-                          ],
-                        ))
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(20),
-                      right: Screenadapter.width(50),
-                    ),
-                    child: Text(
-                      "￥699起",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: Screenadapter.fontSize(42),
-                        color: Colors.black
-                      ),
-                      maxLines: 2,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(10),
-                      right: Screenadapter.width(50),
-                    ),
-                    child: Container(
-                      height: Screenadapter.height(38),
-                      width: Screenadapter.width(88),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[300],
-                        borderRadius: BorderRadius.circular(2)
-                      ),
-                      child: Center(child: Text(
-                        "分期",
-                        style: TextStyle(
-                          fontSize: Screenadapter.fontSize(28),
-                          color: Colors.white
-                        ),
-                      )),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Screenadapter.height(10),
-                      right: Screenadapter.width(50),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "319247条评论",
-                          style: TextStyle(
-                            fontSize: Screenadapter.fontSize(24),
-                            color: Colors.black45
-                          ),
-                        ),
-                        SizedBox(width: Screenadapter.width(24)),
-                        Text(
-                          "99.99%满意",
-                          style: TextStyle(
-                            fontSize: Screenadapter.fontSize(24),
-                            color: Colors.black45
-                          ),
-                        ),
-                      ],
-                    )
-                  ),
-                ],
-              ))
-            ],
-          ),
-        );
+                (index == controller.productList.length - 1) ? _loadingWidget() : SizedBox(height: 1),
+              ],
+            );
 
-      },
-    );
+          },
+        );
+      } else {
+        return _loadingWidget();
+      }
+    });
   }
 
   // 顶部筛选框
@@ -246,32 +101,254 @@ class ProductListView extends GetView<ProductListController> {
         color: Colors.white,
         height: Screenadapter.height(120),
         width: double.infinity,
-        child: Row(
+        child: Obx(() => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _topSelectionItemWidget("综合"),
-            _topSelectionItemWidget("销量"),
-            _topSelectionItemWidget("价格"),
-            _topSelectionItemWidget("新品优先"),
-            _topSelectionItemWidget("筛选"),
+            _topSelectionItemWidget("综合", 1),
+            _topSelectionItemWidget("销量", 2),
+            _topSelectionItemWidget("价格", 3),
+            _topSelectionItemWidget("新品优先", 4),
+            _topSelectionItemWidget("筛选", 5),
           ],
-        ),
+        )),
       ));
   }
 
 
   //----------小部件-----------
-  // 综合 销量 价格 新品优先 筛选
-  Widget _topSelectionItemWidget(String title) {
-    return Expanded(child: Text(
-      title,
-      style: TextStyle(
-        fontSize: Screenadapter.fontSize(38),
-        color: Colors.black45
+  // 列表中图片
+  Widget _listImageWidget(String imageUrl) {
+    return Container(
+      width: Screenadapter.width(360),
+      padding: EdgeInsets.fromLTRB(Screenadapter.width(20), Screenadapter.height(20), Screenadapter.width(20), 0),
+      child: Image.network(
+        imageUrl,
+        fit: BoxFit.fitWidth,
       ),
-      textAlign: TextAlign.center,
+    );
+  }
+  // 列表，手机型号
+  Widget _listProductNameWidget(String title) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(40),
+        right: Screenadapter.width(50),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: Screenadapter.fontSize(42)
+        ),
+      ),
+    );
+  }
+  // 列表，商品描述
+  Widget _listProductDescritionWidget(String description) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(10),
+        right: Screenadapter.width(50),
+      ),
+      child: Text(
+        description,
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: Screenadapter.fontSize(32),
+          color: Colors.black38
+        ),
+        maxLines: 2,
+      ),
+    );
+  }
+  // 列表，商品性能
+  Widget _listProductInterInfoWiget() {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(10),
+        right: Screenadapter.width(0),
+      ),
+      child: Row(
+        children: [
+          Expanded(child: Column(
+            children: [
+              Text(
+                "CPU",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(32),
+                  color: Colors.black45
+                ),
+              ),
+              Text(
+                "Helio G25",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(28),
+                  color: Colors.black45
+                ),
+              ),
+            ],
+          )),
+          Container(
+            width: 1,
+            height: Screenadapter.height(40),
+            color: Colors.black12,
+          ),
+          Expanded(child: Column(
+            children: [
+              Text(
+                "高清拍摄",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(32),
+                  color: Colors.black45
+                ),
+              ),
+              Text(
+                "1300万 像素",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(28),
+                  color: Colors.black45
+                ),
+              ),
+            ],
+          )),
+          Container(
+            width: 1,
+            height: Screenadapter.height(40),
+            color: Colors.black12,
+          ),
+          Expanded(child: Column(
+            children: [
+              Text(
+                "超大屏",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(32),
+                  color: Colors.black45
+                ),
+              ),
+              Text(
+                "6.3英寸",
+                style: TextStyle(
+                  fontSize: Screenadapter.fontSize(28),
+                  color: Colors.black45
+                ),
+              ),
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+  // 列表，商品价格
+  Widget _listProductPrice(String price) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(20),
+        right: Screenadapter.width(50),
+      ),
+      child: Text(
+        "￥$price起",
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Screenadapter.fontSize(42),
+          color: Colors.black
+        ),
+        maxLines: 2,
+      ),
+    );
+  }
+  // 列表商品标签
+  Widget _listProdctTag() {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(10),
+        right: Screenadapter.width(50),
+      ),
+      child: Container(
+        height: Screenadapter.height(38),
+        width: Screenadapter.width(88),
+        decoration: BoxDecoration(
+          color: Colors.blue[300],
+          borderRadius: BorderRadius.circular(2)
+        ),
+        child: Center(child: Text(
+          "分期",
+          style: TextStyle(
+            fontSize: Screenadapter.fontSize(28),
+            color: Colors.white
+          ),
+        )),
+      ),
+    );
+  }
+  // 列表，商品评论
+  Widget _listProductCommendWidget() {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Screenadapter.height(10),
+        right: Screenadapter.width(50),
+        bottom: Screenadapter.height(50),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "319247条评论",
+            style: TextStyle(
+              fontSize: Screenadapter.fontSize(24),
+              color: Colors.black45
+            ),
+          ),
+          SizedBox(width: Screenadapter.width(24)),
+          Text(
+            "99.99%满意",
+            style: TextStyle(
+              fontSize: Screenadapter.fontSize(24),
+              color: Colors.black45
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+
+
+  // 综合 销量 价格 新品优先 筛选
+  Widget _topSelectionItemWidget(String title, int index) {
+    return Expanded(child: InkWell(
+      onTap: (){
+        controller.updateSelectIndex(index);
+      },
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: (controller.selectIndex.value == index) ? FontWeight.bold : FontWeight.normal,
+          fontSize: Screenadapter.fontSize(38),
+          color: (controller.selectIndex.value == index) ? Colors.red : Colors.black45
+        ),
+        textAlign: TextAlign.center,
+      ),
     ));
+  }
+
+  // loading视图
+  Widget _loadingWidget() {
+    if (controller.isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      ); 
+    } else {
+      if (controller.hasMoreDate) {
+        return Center(
+          child: CircularProgressIndicator(),
+        ); 
+      } else {
+        return Center(
+          child: Text("-----我是有底线的-----"),
+        );
+      }
+    }
+    
   }
 
   @override
