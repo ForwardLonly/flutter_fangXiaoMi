@@ -15,6 +15,8 @@ class ProductListController extends GetxController {
   bool isLoading = false;
   // 滚动视图
   ScrollController scrollController = ScrollController();
+  // 右侧侧边栏
+  GlobalKey<ScaffoldState> stateGolbalKey = GlobalKey<ScaffoldState>();
   // 商品数据
   RxList<ProductItemMdel> productList = <ProductItemMdel>[].obs;
   // 筛选选中的索引
@@ -82,6 +84,7 @@ class ProductListController extends GetxController {
   void updateSelectIndex(int index) {
     if (index == 4) {
       selectIndex.value = index;
+      stateGolbalKey.currentState?.openEndDrawer();
       update();
       return;
     }

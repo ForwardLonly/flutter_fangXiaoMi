@@ -379,6 +379,12 @@ class ProductListView extends GetView<ProductListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.stateGolbalKey,
+      endDrawer:  Drawer(
+        child: DrawerHeader(
+          child: Text("右侧筛选"),
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
          child: Container(
