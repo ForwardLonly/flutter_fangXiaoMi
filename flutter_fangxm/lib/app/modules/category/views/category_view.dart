@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
+import 'package:flutter_fangxm/app/routes/app_pages.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/https_client.dart';
 import 'package:flutter_fangxm/app/sources/FangXMIcon.dart';
@@ -106,7 +107,11 @@ class CategoryView extends GetView<CategoryController> {
           itemCount: controller.rightCategoryList.length,
           itemBuilder: (context, index) {
             final itemModel = controller.rightCategoryList[index] as CategoryItemModel;
-            return  Column(
+            return  InkWell(
+              onTap: (){
+                Get.toNamed(Routes.PRODUCT_LIST);
+              },
+              child: Column(
                 children: [
                   AspectRatio(
                     aspectRatio: 1/1,
@@ -120,6 +125,7 @@ class CategoryView extends GetView<CategoryController> {
                     child: Text("${itemModel.title}", style: TextStyle(color: Colors.black87, fontSize: Screenadapter.fontSize(32))),
                   )
                 ],
+              ),
             );
           }))
         ,
