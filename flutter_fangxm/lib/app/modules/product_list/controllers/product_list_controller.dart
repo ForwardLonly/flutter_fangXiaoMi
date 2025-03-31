@@ -19,6 +19,18 @@ class ProductListController extends GetxController {
   RxList<ProductItemMdel> productList = <ProductItemMdel>[].obs;
   // 筛选选中的索引
   RxInt selectIndex = 1.obs;
+  // 筛选选中的箭头
+  RxInt selectIndexArrow = 1.obs;
+  /*二级导航数据*/
+  List subHeaderList = [
+    // 排序     升序：price_1     {price:1}        降序：price_-1   {price:-1}
+    {"id": 1,"title": "综合","fileds": "all","sort": -1,},
+    {"id": 2, "title": "销量", "fileds": 'salecount', "sort": -1},
+    {"id": 3, "title": "价格", "fileds": 'price', "sort": -1},
+    {"id": 4, "title": "筛选"}
+  ];
+  // 排序的数据
+  String sort = "";
 
 
   @override
@@ -50,7 +62,8 @@ class ProductListController extends GetxController {
 
   // 获取商品列表的数据
   void _getProductListRequest() async {
-    final response = await HttpsClient.get("api/plist?page=$page&pageSize=$pageSize&cid=${Get.arguments["pid"]}");
+    print("api/plist?page=$page&pageSize=$pageSize&cid=${Get.arguments["pid"]}&sort=$sort");
+    final response = await HttpsClient.get("api/plist?page=$page&pageSize=$pageSize&cid=${Get.arguments["pid"]}&sort=$sort");
     if (response.statusCode == 200) {
       final categoryModel = ProductMdel.fromJson(response.data);
       productList.addAll(categoryModel.result);
@@ -67,7 +80,36 @@ class ProductListController extends GetxController {
 
   // 修改筛选选中的索引
   void updateSelectIndex(int index) {
+    if (index == 4) {
+      selectIndex.value = index;
+      update();
+      return;
+    }
+    if (selectIndex.value == index) {
+      // 如果索引相等，就改变箭头
+      subHeaderList[index - 1]["sort"] = subHeaderList[index - 1]["sort"] * (-1);
+      // 先清空一下数据，不然可能不会触发selectIndexArrow值的改变
+      selectIndexArrow.value = 0;
+      selectIndexArrow.value = subHeaderList[index - 1]["sort"];
+    }
     selectIndex.value = index;
+    // 获取搜索的数据
+    sort = "${subHeaderList[index - 1]["fileds"]}_${subHeaderList[index - 1]["sort"]}";
+    
+    // 重置page
+    page = 1;
+    // 重置数据
+    if (productList.isNotEmpty) {
+      // 重置滚动的位置
+      scrollController.jumpTo(0);
+      // 重置数据
+      productList.value = [];
+    }
+    // 重置是否有更多数据
+    hasMoreDate = true;
+    // 重新请求数据
+    _getProductListRequest();
+
     update();
   }
 

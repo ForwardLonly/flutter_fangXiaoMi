@@ -108,8 +108,7 @@ class ProductListView extends GetView<ProductListController> {
             _topSelectionItemWidget("综合", 1),
             _topSelectionItemWidget("销量", 2),
             _topSelectionItemWidget("价格", 3),
-            _topSelectionItemWidget("新品优先", 4),
-            _topSelectionItemWidget("筛选", 5),
+            _topSelectionItemWidget("筛选", 4),
           ],
         )),
       ));
@@ -146,21 +145,26 @@ class ProductListView extends GetView<ProductListController> {
   }
   // 列表，商品描述
   Widget _listProductDescritionWidget(String description) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: Screenadapter.height(10),
-        right: Screenadapter.width(50),
-      ),
-      child: Text(
-        description,
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: Screenadapter.fontSize(32),
-          color: Colors.black38
+    if (description.isNotEmpty) {
+      return Padding(
+        padding: EdgeInsets.only(
+          top: Screenadapter.height(10),
+          right: Screenadapter.width(50),
         ),
-        maxLines: 2,
-      ),
-    );
+        child: Text(
+          description,
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: Screenadapter.fontSize(32),
+            color: Colors.black38
+          ),
+          maxLines: 2,
+        ),
+      );
+    } else {
+      return SizedBox(height: 1);
+    }
+    
   }
   // 列表，商品性能
   Widget _listProductInterInfoWiget() {
@@ -319,16 +323,37 @@ class ProductListView extends GetView<ProductListController> {
       onTap: (){
         controller.updateSelectIndex(index);
       },
-      child: Text(
-        title,
-        style: TextStyle(
-          fontWeight: (controller.selectIndex.value == index) ? FontWeight.bold : FontWeight.normal,
-          fontSize: Screenadapter.fontSize(38),
-          color: (controller.selectIndex.value == index) ? Colors.red : Colors.black45
-        ),
-        textAlign: TextAlign.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: (controller.selectIndex.value == index) ? FontWeight.bold : FontWeight.normal,
+              fontSize: Screenadapter.fontSize(38),
+              color: (controller.selectIndex.value == index) ? Colors.red : Colors.black45
+            ),
+            textAlign: TextAlign.center,
+          ),
+          _topSelectionItemArrowWidget(index)
+        ],
       ),
     ));
+  }
+
+  // 筛选的箭头
+  Widget _topSelectionItemArrowWidget(int index) {
+    // controller.selectIndexArrow.value 这个值必须调用，不然不会刷新箭头
+    if ((index == 2 || index == 3) && (controller.selectIndexArrow.value == 1 || controller.selectIndexArrow.value == -1) ) {
+      bool isSelect = controller.selectIndex.value == index;
+      bool arrowDown = controller.subHeaderList[index-1]["sort"] == 1;
+      return Icon(
+        arrowDown ? Icons.arrow_drop_down : Icons.arrow_drop_up,
+        color: isSelect ? Colors.red : Colors.black45,
+      );
+    } else {
+      return SizedBox(width: 1);
+    }
   }
 
   // loading视图
