@@ -14,21 +14,26 @@ class CategoryView extends GetView<CategoryController> {
 
   // 导航栏的title
   Widget _appBarTitleWidget() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 0), 
-      height: Screenadapter.height(100),
-      width:  Screenadapter.width(880) ,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Color.fromARGB(10, 0, 0, 0)
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
-          Expanded(child: Text("耳机", style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
-        ],
-      ),
+    return InkWell(
+      onTap: () {
+        Get.toNamed(Routes.SEARCHES);
+      },
+      child:  Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 0), 
+        height: Screenadapter.height(100),
+        width:  Screenadapter.width(880) ,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Color.fromARGB(10, 0, 0, 0)
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
+            Expanded(child: Text("耳机", style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
+          ],
+        ),
+      )
     );
   }
 
