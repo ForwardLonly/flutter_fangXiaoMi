@@ -33,7 +33,10 @@ class ProductListController extends GetxController {
   ];
   // 排序的数据
   String sort = "";
-
+  // 搜索关键字
+  String searchKeywords = Get.arguments["searchKeywords"] ?? "";
+  // 分类id
+  String? pid = Get.arguments["pid"];
 
   @override
   void onInit() {
@@ -65,7 +68,13 @@ class ProductListController extends GetxController {
   // 获取商品列表的数据
   void _getProductListRequest() async {
     print("api/plist?page=$page&pageSize=$pageSize&cid=${Get.arguments["pid"]}&sort=$sort");
-    final response = await HttpsClient.get("api/plist?page=$page&pageSize=$pageSize&cid=${Get.arguments["pid"]}&sort=$sort");
+    String apiUrl = "";
+    if (pid != null) {
+      apiUrl = "api/plist?page=$page&pageSize=$pageSize&cid=$pid&sort=$sort";
+    } else {
+      apiUrl = "api/plist?page=$page&pageSize=$pageSize&search=$searchKeywords&sort=$sort";
+    }
+    final response = await HttpsClient.get(apiUrl);
     if (response.statusCode == 200) {
       final categoryModel = ProductMdel.fromJson(response.data);
       productList.addAll(categoryModel.result);

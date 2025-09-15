@@ -20,7 +20,7 @@ class SearchesView extends GetView<SearchesController> {
             onPressed: (){
               Get.back();
             }, 
-            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black87)
+            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black54)
           ),
           Expanded(child: Container(
             height: Screenadapter.height(96),
@@ -43,11 +43,22 @@ class SearchesView extends GetView<SearchesController> {
                   borderSide: BorderSide.none
                 )
               ),
+              onChanged: (value) {
+                controller.searchKeywords = value;
+              },
+              onSubmitted: (value) {
+                // 替换路由，让搜索结果页返回根控制器
+                Get.offAndToNamed("/product-list", arguments: {
+                  "searchKeywords" : controller.searchKeywords
+                });
+              },
             ),
           )),
           TextButton(
             onPressed: (){
-
+              Get.offAndToNamed("/product-list", arguments: {
+                "searchKeywords" : controller.searchKeywords
+              });
             }, 
             child: Text(
               "搜索", 
@@ -144,7 +155,6 @@ class SearchesView extends GetView<SearchesController> {
                       ),
                       Expanded(
                         child: Container(
-                          color: Colors.blue,
                           padding: EdgeInsets.all(Screenadapter.width(10)),
                           alignment: Alignment.centerLeft,
                           child: RichText(text: TextSpan(

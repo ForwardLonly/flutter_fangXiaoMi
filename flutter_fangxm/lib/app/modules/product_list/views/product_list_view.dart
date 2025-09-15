@@ -3,7 +3,7 @@ import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/https_client.dart';
 
 import 'package:get/get.dart';
-
+import 'package:flutter_fangxm/app/routes/app_pages.dart';
 import '../controllers/product_list_controller.dart';
 
 class ProductListView extends GetView<ProductListController> {
@@ -19,76 +19,75 @@ class ProductListView extends GetView<ProductListController> {
         borderRadius: BorderRadius.circular(20),
         color: Color.fromARGB(10, 0, 0, 0)
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
-          Expanded(child: Text("耳机", style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
-        ],
+      child: InkWell(
+        onTap: () {
+          Get.offAndToNamed(Routes.SEARCHES);
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
+            Expanded(child: Text(controller.searchKeywords , style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
+          ],
+        ),
       ),
     );
   }
 
   // 商品列表
   Widget _productListWidget() {
-    return Obx( () {
-      if (controller.productList.isNotEmpty) {
-        return ListView.builder(
-          controller: controller.scrollController,
-          padding: EdgeInsets.fromLTRB(
-            Screenadapter.width(24),
-            Screenadapter.width(124), 
-            Screenadapter.width(24), 
-            Screenadapter.width(24)),
-          itemCount: controller.productList.length,
-          itemBuilder: (context, index) {
-            var itemModel = controller.productList[index];
-            return Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: Screenadapter.width(24)),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Row(
+    return ListView.builder(
+      controller: controller.scrollController,
+      padding: EdgeInsets.fromLTRB(
+        Screenadapter.width(24),
+        Screenadapter.width(124), 
+        Screenadapter.width(24), 
+        Screenadapter.width(24)),
+      itemCount: controller.productList.length,
+      itemBuilder: (context, index) {
+        var itemModel = controller.productList[index];
+        return Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: Screenadapter.width(24)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 图片
+                  _listImageWidget(HttpsClient.replacePic("${itemModel.pic}")),
+                  // 手机信息
+                  Expanded(child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 图片
-                      _listImageWidget(HttpsClient.replacePic("${itemModel.pic}")),
-                      // 手机信息
-                      Expanded(child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 商品名称,
-                          _listProductNameWidget("${itemModel.title}"),
-                          // 商品描述
-                          _listProductDescritionWidget("${itemModel.subTitle}"),
-                          // 商品性能
-                          _listProductInterInfoWiget(),
-                          // 商品价格,
-                          _listProductPrice("${itemModel.price}"),
-                          // 商品标签
-                          _listProdctTag(),
-                          // 商品评论
-                          _listProductCommendWidget()
-                        ],
-                      ))
+                      // 商品名称,
+                      _listProductNameWidget("${itemModel.title}"),
+                      // 商品描述
+                      _listProductDescritionWidget("${itemModel.subTitle}"),
+                      // 商品性能
+                      _listProductInterInfoWiget(),
+                      // 商品价格,
+                      _listProductPrice("${itemModel.price}"),
+                      // 商品标签
+                      _listProdctTag(),
+                      // 商品评论
+                      _listProductCommendWidget()
                     ],
-                  ),
-                ),
-                (index == controller.productList.length - 1) ? _loadingWidget() : SizedBox(height: 1),
-              ],
-            );
-
-          },
+                  ))
+                ],
+              ),
+            ),
+            (index == controller.productList.length - 1) ? _loadingWidget() : SizedBox(height: 1),
+          ],
         );
-      } else {
-        return _loadingWidget();
-      }
-    });
+
+      },
+    );
   }
 
   // 顶部筛选框
@@ -407,12 +406,18 @@ class ProductListView extends GetView<ProductListController> {
           ),
         )
       ),
-      body: Stack(
-        children: [
-          _productListWidget(),
-          _topSelectionWiget(),
-        ],
-      ),
+      body:  Obx((){
+        if (controller.productList.isNotEmpty) {
+          return Stack(
+            children: [
+              _productListWidget(),
+              _topSelectionWiget(),
+            ],
+          );
+        } else {
+          return _loadingWidget();
+        }
+      }),
     );
   }
 }

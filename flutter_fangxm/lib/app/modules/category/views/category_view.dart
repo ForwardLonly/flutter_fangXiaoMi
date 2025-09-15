@@ -115,7 +115,8 @@ class CategoryView extends GetView<CategoryController> {
             return  InkWell(
               onTap: (){
                 Get.toNamed(Routes.PRODUCT_LIST, arguments: {
-                  "pid": itemModel.sId                  
+                  "pid": itemModel.sId,
+                  "searchKeywords": itemModel.title                 
                 });
               },
               child: Column(

@@ -26,6 +26,9 @@ class AppPages {
       binding: ProductListBinding(),
     ),
     GetPage(
+      // 自定义入场动画和时间
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 100),
       name: _Paths.SEARCHES,
       page: () => const SearchesView(),
       binding: SearchesBinding(),

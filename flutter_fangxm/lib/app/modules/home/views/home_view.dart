@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/modules/home/models/category_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/focus_model.dart';
 import 'package:flutter_fangxm/app/modules/home/models/product_mdel.dart';
+import 'package:flutter_fangxm/app/routes/app_pages.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
 import 'package:flutter_fangxm/app/service/https_client.dart';
 import 'package:flutter_fangxm/app/service/keepAliveWraper.dart';
@@ -52,13 +53,18 @@ class HomeView extends GetView<HomeController> {
               borderRadius: BorderRadius.circular(20),
               color: Color.fromARGB(10, 0, 0, 0)
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
-                Expanded(child: Text("耳机", style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0), child: Icon(FangXMIcon.saomiao, color: Colors.black26)),
-              ],
+            child: InkWell(
+              onTap: () {
+                Get.toNamed(Routes.SEARCHES);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Icon(Icons.search, color: Colors.black26)),
+                  Expanded(child: Text("耳机", style: TextStyle(color: Colors.black45, fontSize: Screenadapter.fontSize(36)))),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0), child: Icon(FangXMIcon.saomiao, color: Colors.black26)),
+                ],
+              ),
             ),
           ),
           Container(
