@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_fangxm/app/service/ScreenAdapter.dart';
+import 'package:flutter_fangxm/app/service/store_service.dart';
 
 import 'package:get/get.dart';
 
@@ -47,6 +50,8 @@ class SearchesView extends GetView<SearchesController> {
                 controller.searchKeywords = value;
               },
               onSubmitted: (value) {
+                // 保存搜索记录
+                StoreService.setSearchHistoryString(controller.searchKeywords);
                 // 替换路由，让搜索结果页返回根控制器
                 Get.offAndToNamed("/product-list", arguments: {
                   "searchKeywords" : controller.searchKeywords
@@ -56,6 +61,9 @@ class SearchesView extends GetView<SearchesController> {
           )),
           TextButton(
             onPressed: (){
+              // 保存搜索记录
+              StoreService.setSearchHistoryString(controller.searchKeywords);
+              // 跳转
               Get.offAndToNamed("/product-list", arguments: {
                 "searchKeywords" : controller.searchKeywords
               });
@@ -88,13 +96,19 @@ class SearchesView extends GetView<SearchesController> {
 
   // 搜索历史
   Widget _searchListWidget() {
-    return Column(
-      children: [
-        SizedBox(height: 5),
-        _sectionHeaderWidget("搜索历史", Icon(Icons.delete)),
-        _sectionContentWidget(["手机111", "电脑","手机", "电脑222", "手机", "电脑333", "手机", "电脑"]),
-      ],
-    );
+    return Obx((){
+      if (controller.historyList.isNotEmpty) {
+        return Column(
+          children: [
+            SizedBox(height: 5),
+            _sectionHeaderWidget("搜索历史", Icon(Icons.delete)),
+            _sectionContentWidget(controller.historyList),
+          ],
+        );
+      } else {
+        return SizedBox(height: 0);
+      }
+    });
   }
 
   // 猜你想搜
