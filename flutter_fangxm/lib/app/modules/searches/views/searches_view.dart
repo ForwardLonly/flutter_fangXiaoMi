@@ -101,8 +101,16 @@ class SearchesView extends GetView<SearchesController> {
         return Column(
           children: [
             SizedBox(height: 5),
-            _sectionHeaderWidget("搜索历史", Icon(Icons.delete)),
-            _sectionContentWidget(controller.historyList),
+            _sectionHeaderWidget(
+              "搜索历史", 
+              IconButton(
+                onPressed: (){
+                  _clearHistoryAlert();
+                }, 
+                icon: Icon(Icons.delete_outline)
+              )
+            ),
+            _sectionContentWidget(controller.historyList, true),
           ],
         );
       } else {
@@ -116,8 +124,16 @@ class SearchesView extends GetView<SearchesController> {
     return Column(
       children: [
         SizedBox(height: 20),
-        _sectionHeaderWidget("猜你想搜", Icon(Icons.refresh)),
-        _sectionContentWidget(["手机111", "电脑44","手机89", "电脑222", "手机", "电脑333", "手机", "电脑"])
+        _sectionHeaderWidget(
+          "猜你想搜", 
+          IconButton(
+            onPressed: (){
+
+            }, 
+            icon: Icon(Icons.refresh)
+          )
+        ),
+        _sectionContentWidget(["手机111", "电脑44","手机89", "电脑222", "手机", "电脑333", "手机", "电脑"], false)
       ],
     );
   }
@@ -200,7 +216,7 @@ class SearchesView extends GetView<SearchesController> {
   }
 
   // 组头
-  Widget _sectionHeaderWidget(String title, Icon icon) {
+  Widget _sectionHeaderWidget(String title, IconButton icon) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -218,23 +234,110 @@ class SearchesView extends GetView<SearchesController> {
   }
 
   // 分组内容
-  Widget _sectionContentWidget(List<String> data) {
+  Widget _sectionContentWidget(List<String> data, bool isNeedAction) {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
         alignment: WrapAlignment.start,
         children: data.map((value){
-          return Container(
-            padding: EdgeInsets.fromLTRB(Screenadapter.width(30), Screenadapter.width(10), Screenadapter.width(30), Screenadapter.width(10)),
-            margin: EdgeInsets.fromLTRB(Screenadapter.width(15), Screenadapter.width(20), Screenadapter.width(15), 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5)
+          return GestureDetector(
+            onLongPress: (){
+              if (isNeedAction) {
+                _removeSingleHistoryAlert(value);
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.fromLTRB(Screenadapter.width(30), Screenadapter.width(10), Screenadapter.width(30), Screenadapter.width(10)),
+              margin: EdgeInsets.fromLTRB(Screenadapter.width(15), Screenadapter.width(20), Screenadapter.width(15), 0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child: Text(value, style: TextStyle(fontSize: Screenadapter.fontSize(32), color: Colors.black87),),
             ),
-            child: Text(value, style: TextStyle(fontSize: Screenadapter.fontSize(32), color: Colors.black87),),
           );
         }).toList(),
       )
+    );
+  }
+
+  // 确认是否清空的弹框
+  void _clearHistoryAlert() {
+    Get.bottomSheet(Container(
+      padding: EdgeInsets.all(Screenadapter.width(20)),
+      width: double.infinity,
+      height: Screenadapter.height(400),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: Screenadapter.height(40)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "确定要清空历史记录吗？", 
+                style: TextStyle(fontSize: Screenadapter.fontSize(42), fontWeight: FontWeight.bold))
+            ],
+          ),
+          SizedBox(height: Screenadapter.height(40)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: Screenadapter.width(420),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Color.fromARGB(235, 222, 222, 219)),
+                    foregroundColor: WidgetStatePropertyAll(Colors.white)
+                  ),
+                  onPressed: (){
+                    Get.back();
+                  }, 
+                  child: Text("取消")
+                ),
+              ),
+              SizedBox(
+                width: Screenadapter.width(420),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Color.fromARGB(235, 222, 222, 219)),
+                    foregroundColor: WidgetStatePropertyAll(Colors.red)
+                  ),
+                  onPressed: (){
+                    controller.clearSearchHistory();
+                    Get.back();
+                  }, 
+                  child: Text("确定")
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  // 删除某条数据
+  void _removeSingleHistoryAlert(String keyword) {
+    Get.defaultDialog(
+      title: "提示",
+      middleText: "确定要删除\"$keyword\"这个记录吗?",
+      confirm: ElevatedButton(
+        onPressed: (){
+          controller.removeSingleHistory(keyword);
+          Get.back();
+        }, 
+        child: Text("确定")
+      ),
+      cancel: ElevatedButton(
+        onPressed: (){
+          Get.back();
+        }, 
+        child: Text("取消")
+      ),
     );
   }
 

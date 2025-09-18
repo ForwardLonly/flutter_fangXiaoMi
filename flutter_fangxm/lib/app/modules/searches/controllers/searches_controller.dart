@@ -25,4 +25,20 @@ class SearchesController extends GetxController {
       update();
     }
   }
+
+  // 清空历史记录
+  clearSearchHistory() async {
+    await StoreService.clearSearchHistory();
+    historyList.clear();
+    update();
+  }
+
+  // 删除某条记录
+  removeSingleHistory(String keyword) async {
+    await StoreService.deleteSearchHistory(keyword);
+    if (historyList.isNotEmpty) {
+      historyList.remove(keyword);
+      update();
+    }
+  }
 }
