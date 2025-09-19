@@ -397,63 +397,68 @@ class HomeView extends GetView<HomeController> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               var itemModel = controller.goodsList[index] as ProductItemMdel;
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5)
+              return InkWell(
+                onTap: (){
+                  Get.toNamed(Routes.PRODUCT_CONTENT);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5)
+                          ),
+                        child: Image.network(
+                          HttpsClient.replacePic("${itemModel.pic}"),
+                          fit: BoxFit.cover,
                         ),
-                      child: Image.network(
-                        HttpsClient.replacePic("${itemModel.pic}"),
-                        fit: BoxFit.cover,
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(
-                        top: Screenadapter.height(30),
-                        left: Screenadapter.width(20),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(
+                          top: Screenadapter.height(30),
+                          left: Screenadapter.width(20),
+                        ),
+                        child: Text(
+                          "${itemModel.title}", 
+                          textAlign: TextAlign.start, 
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(38))
+                        ),
                       ),
-                      child: Text(
-                        "${itemModel.title}", 
-                        textAlign: TextAlign.start, 
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(38))
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(
+                          top: Screenadapter.height(20),
+                          left: Screenadapter.width(20),
+                        ),
+                        child: Text(
+                          "${itemModel.title}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(color: Colors.black38, fontSize: Screenadapter.fontSize(32))
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(
-                        top: Screenadapter.height(20),
-                        left: Screenadapter.width(20),
-                      ),
-                      child: Text(
-                        "${itemModel.title}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: Colors.black38, fontSize: Screenadapter.fontSize(32))
-                      ),
-                    ),
 
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(
-                        top: Screenadapter.height(40),
-                        left: Screenadapter.width(20),
-                        bottom: Screenadapter.height(50),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(
+                          top: Screenadapter.height(40),
+                          left: Screenadapter.width(20),
+                          bottom: Screenadapter.height(50),
+                        ),
+                        child: Text(
+                          "￥${itemModel.price}元起",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(36))
+                        ),
                       ),
-                      child: Text(
-                        "￥${itemModel.price}元起",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: Screenadapter.fontSize(36))
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                )
               );
             }
           )

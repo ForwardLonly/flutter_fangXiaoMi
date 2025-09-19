@@ -14,7 +14,6 @@ class SearchesView extends GetView<SearchesController> {
   // 自定义导航栏
   Widget _appBarTitleWidget() {
     return Container(
-      color: Color.fromRGBO(246, 246, 246, 1),
       padding: EdgeInsets.fromLTRB(0, Screenadapter.stateBarHeight(), 0, 0),
       child: Row(
         children: [
@@ -345,7 +344,7 @@ class SearchesView extends GetView<SearchesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(Screenadapter.height(96)),
         child: _appBarTitleWidget()
       ),
       body: _bodyWidget(),
